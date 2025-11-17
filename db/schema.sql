@@ -1,30 +1,34 @@
-CREATE DATABASE IF NOT EXIST rating_app;
-USE rating_app;
+CREATE DATABASE IF NOT EXISTS store_rating;
+USE store_rating;
 
+-- USERS TABLE
 CREATE TABLE users (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(60) NOT NULL,
-    email VARCHAR(255) NOT NULL UNIQUE,
-    password VARCHAR(60) NOT NULL,
-    adress VARCHAR(400),
-    role ENUM('admin','user','owner') DEFAULT'user'
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(60) NOT NULL,
+  email VARCHAR(255) NOT NULL UNIQUE,
+  password VARCHAR(255) NOT NULL,
+  address VARCHAR(400),
+  role ENUM('admin','user','owner') DEFAULT 'user',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CRETAT TABLE stores (
-    id INT AUTO_INCREMENT PRIMERY KEY,
-    name VARCHAR(60) NOT NULL,
-    email VARCHAR(255),
-    adress VARCHAR(400),
-    owner_id INT,
-    FOREIGN KEY (owner_id) REFERENCES user(id)
-;)
+-- STORES TABLE
+CREATE TABLE stores (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  email VARCHAR(255),
+  address VARCHAR(400),
+  owner_id INT,
+  FOREIGN KEY (owner_id) REFERENCES users(id)
+);
 
-CREATE TABLE rating (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT,
-    store_id INT,
-    rating TINYINT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCESusers(id),
-    FOREIGN KEY (store_id) REFERENCES stores(id)
+-- RATINGS TABLE
+CREATE TABLE ratings (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  store_id INT NOT NULL,
+  user_id INT NOT NULL,
+  rating TINYINT NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users(id),
+  FOREIGN KEY (store_id) REFERENCES stores(id)
 );
